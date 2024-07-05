@@ -1,12 +1,13 @@
 //const column = document.querySelectorAll(".column");
 const addCardbtn = document.querySelector("#addCard") 
 const main = document.querySelector("#main");
+let onMoveElm = null;
 
 const addTask = (event) => {
     event.preventDefault();
 
 const currentForm = event.target;
-console.log(currentForm);
+// console.log(currentForm);
 const value =  currentForm.elements[0].value;
 
 const parent = currentForm.parentElement;
@@ -26,13 +27,15 @@ localStorage.setItem("savedTasks", JSON.stringify(savedTasks));
 currentForm.reset();
 }
 
+
+
 // for (let i = 0; i < column.length; i++) {
 //     const form = column[i].lastElementChild;
 //     console.log(column);
 //     form.addEventListener("submit", addTask);
 // }
 
-
+    
   const CreateCard = (newCard) => {
 
     const newDiv = document.createElement("div");
@@ -53,6 +56,26 @@ currentForm.reset();
 
     newForm.addEventListener("submit", addTask);
     
+    newDiv.addEventListener("dragleave", (event) => event.preventDefault());
+
+    newDiv.addEventListener("dragover", (event) => event.preventDefault());
+
+    newDiv.addEventListener("drop",(event)  => {
+      const dropped = event.target;
+      const form = event.target.lastElementChild;
+     // console.log(form);
+    if (dropped.className.includes("column")) {
+      dropped.appendChild(onMoveElm);
+
+      newDiv.insertBefore(onMoveElm, form)
+    }
+    if (dropped.className.includes("ticket")) {
+      dropped.parentElement.appendChild(onMoveElm);
+    }
+
+  }) 
+    
+    
 
     return newDiv
   }
@@ -63,7 +86,15 @@ currentForm.reset();
     const elementText = document.createTextNode(value);
   
     ticket.setAttribute("draggable", "true");
+    ticket.setAttribute("class", "ticket");
     ticket.appendChild(elementText);
+  
+    ticket.addEventListener("mousedown", (event) => {
+     const draggedTicket = event.target;
+      onMoveElm = draggedTicket;
+     
+    });
+  
   
     return ticket;
   };

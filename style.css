@@ -47,7 +47,9 @@ main {
   .column > form > input {
     padding: 10px;
     width: 100%;
+    background-color: white;
   }
+  
   #addCard,input{
     padding: 4px;
     /* color: white; */
